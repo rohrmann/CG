@@ -3,7 +3,7 @@ OBJ:=$(SRC:.cpp=.o)
 EXEC:=assignment1
 CC:=gcc
 CXX:=g++
-CFLAGS:=`pkg-config --cflags gl`
+CFLAGS:=`pkg-config --cflags gl` -ggdb
 CXXFLAGS:=$(CFLAGS)
 LDFLAGS:=`pkg-config --libs gl`
 LIBS:=-lglut -lm
