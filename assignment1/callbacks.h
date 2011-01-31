@@ -21,7 +21,10 @@ private:
 	static const double SPEED_Y=0.1;
 	static const double ROTATION=10;
 	static const double SCALE=1.1;
-	static const int maxLevel = 7;
+	static const int maxLevel = 5;
+	static const int maxSierpinskiLevel = 5;
+	static const double maxHeight = 0.288675135;
+	static const double SPEED_HEIGHT = 0.1/CLOCKS_PER_SEC;
 	static double translationX;
 	static double translationY;
 	static double rotation;
@@ -32,6 +35,8 @@ private:
 	static clock_t lastTimeStamp;
 	static int level;
 	static bool increasePeaks;
+	static double currentHeight;
+	static int currentLevel;
 
 	static std::list<std::pair<double,double> > nodes;
 	static std::list<std::pair<std::pair<double,double>, double > > colors;
@@ -48,7 +53,8 @@ public:
 	static bool unmoveNode(std::pair<double,double> & first, std::pair<double,double>&second, std::pair<double,double>&third, std::pair<std::pair<double,double>,double >&firstColor, std::pair<std::pair<double,double>,double >&secondColor, std::pair<std::pair<double,double>,double >&thirdColor, clock_t diff);
 	static bool moveNode(std::pair<double,double> & first, std::pair<double,double>&second, std::pair<double,double>&third, std::pair<std::pair<double,double>,double >&firstColor, std::pair<std::pair<double,double>,double >&secondColor, std::pair<std::pair<double,double>,double >&thirdColor, clock_t diff);
 	static void drawKochCurve();
-	static void drawSierpinskiTriangle();
+	static void drawKochCurveHelper(int level);
+	static void drawSierpinskiTriangle(int level);
 	static void drawText();
 	static void insertNodes(const std::pair<double,double>& first, const std::pair<double,double>& second,std::list<std::pair<double,double> >::iterator& it, std::list<std::pair<std::pair<double,double>,double > >::iterator& cit);
 	static void print(const std::string& text, double x, double y,double z, double scale);

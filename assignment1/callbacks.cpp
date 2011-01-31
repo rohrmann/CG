@@ -15,6 +15,8 @@ clock_t Drawer::lastTimeStamp = clock();
 int Drawer::level = 0;
 bool Drawer::deleteNodes = false;
 bool Drawer::increasePeaks = true;
+double Drawer::currentHeight = 0;
+int Drawer::currentLevel = 1;
 
 std::list<std::pair<double,double> > Drawer::nodes;
 std::list<std::pair<std::pair<double,double>,double > > Drawer::colors;
@@ -128,7 +130,32 @@ void Drawer::init(){
 	cout << "Animation: T" << endl;
 }
 
-void Drawer::drawSierpinskiTriangle(){
+void Drawer::drawSierpinskiTriangle(int level){
+	glBegin(GL_LINE_LOOP);
+	glVertex2d(-0.25,0.866025404/2);
+	glVertex2d(0.25,0.866025404/2);
+	glVertex2d(0,0);
+	glEnd();
+
+	if(level >0){
+		glPushMatrix();
+		glTranslated(0,0.866025404/2,0);
+		glScaled(1.0/2,1.0/2,1.0/2);
+		drawSierpinskiTriangle(level-1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(-0.25,0,0);
+		glScaled(1.0/2,1.0/2,1.0/2);
+		drawSierpinskiTriangle(level-1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(0.25,0,0);
+		glScaled(1.0/2,1.0/2,1.0/2);
+		drawSierpinskiTriangle(level-1);
+		glPopMatrix();
+	}
 }
 
 void Drawer::reshape(int width, int height){
@@ -141,7 +168,90 @@ void Drawer::reshape(int width, int height){
 	glOrtho(-0.5,0.5,-0.5,0.5,-0.5,0.5);
 }
 
+void Drawer::drawKochCurve(){
+	//glDisable(GL_BLEND);
+	glLineWidth(1.5);
+	glColor3d(0,1,0);
+	glPushMatrix();
+	glTranslated(-0.25,0.144337567,0);
+	glRotated(60,0,0,1);
+	drawKochCurveHelper(currentLevel);
+	glPopMatrix();
 
+	glPushMatrix();
+	glTranslated(0.25,0.144337567,0);
+	glRotated(-60,0,0,1);
+	drawKochCurveHelper(currentLevel);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(0,-0.288675135,0);
+	glRotated(180,0,0,1);
+	drawKochCurveHelper(currentLevel);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(0,-0.288675135,0);
+	glColor3d(0,1,0);
+	drawSierpinskiTriangle(maxSierpinskiLevel);
+	glPopMatrix();
+}
+
+void Drawer::drawKochCurveHelper(int level){
+	glBegin(GL_LINE);
+	glColor3d(0,1,0);
+	glVertex2d(-0.5,0);
+	glVertex2d(0.5,0);
+	glEnd();
+
+	if(level > 1){
+		glPushMatrix();
+		glTranslated(-1.0/3,0,0);
+		glScaled(1.0/3,1.0/3,1.0/3);
+		drawKochCurveHelper(level-1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(1.0/3,0,0);
+		glScaled(1.0/3,1.0/3,1.0/3);
+		drawKochCurveHelper(level-1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(-1.0/12,sin(M_PI*1.0/3)*1.0/6,0);
+		glRotated(60,0,0,1);
+		glScaled(1.0/3,1.0/3,1.0/3);
+		drawKochCurveHelper(level-1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(1.0/12,sin(M_PI*1.0/3)*1.0/6,0);
+		glRotated(-60,0,0,1);
+		glScaled(1.0/3,1.0/3,1.0/3);
+		drawKochCurveHelper(level-1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glScaled(1.0/3,1.0/3,1.0/3);
+		glColor3d(0,1,0);
+		drawSierpinskiTriangle(3);
+		glPopMatrix();
+	}
+	else if(level == 1){
+		glBegin(GL_LINE_STRIP);
+		glColor3d(1-currentHeight/maxHeight,currentHeight/maxHeight,0);
+		glVertex2d(-1.0/6,0);
+		glVertex2d(0,currentHeight);
+		glVertex2d(1.0/6,0);
+		glEnd();
+
+		glPushMatrix();
+		glScaled(1.0/3,1.0/3*currentHeight/maxHeight,1.0/3);
+		drawSierpinskiTriangle(maxSierpinskiLevel);
+		glPopMatrix();
+	}
+}
+/*
 void Drawer::drawKochCurve(){
 
 	glLineWidth(1);
@@ -192,7 +302,7 @@ void Drawer::drawKochCurve(){
 	glEnd();
 	glPopMatrix();
 	glFlush();
-}
+}*/
 
 void Drawer::insertNodes(const std::pair<double,double>& first,const std::pair<double,double>& second,std::list<std::pair<double,double> >::iterator& it, std::list<std::pair<std::pair<double,double>,double > >::iterator& cit){
 	std::pair<double,double> n1;
@@ -234,6 +344,50 @@ void Drawer::insertNodes(const std::pair<double,double>& first,const std::pair<d
 
 void Drawer::idle(){
 
+	if(animation){
+		if(increasePeaks){
+			if(currentHeight >= maxHeight && currentLevel < maxLevel){
+				currentLevel++;
+				currentHeight = 0;
+			}
+			else if(currentHeight >= maxHeight && currentLevel >= maxLevel){
+				increasePeaks = false;
+			}
+			else{
+				clock_t nextTimeStamp = clock();
+				clock_t diff = nextTimeStamp -lastTimeStamp;
+				lastTimeStamp = nextTimeStamp;
+
+				currentHeight += diff*SPEED_HEIGHT;
+
+				if(currentHeight > maxHeight){
+					currentHeight = maxHeight;
+				}
+			}
+		}
+		else{
+			if(currentHeight == 0 && currentLevel >1){
+				currentLevel--;
+				currentHeight = maxHeight;
+			}
+			else if(currentHeight == 0 && currentLevel == 1){
+				increasePeaks = true;
+			}
+			else{
+				clock_t nextTimeStamp = clock();
+				clock_t diff = nextTimeStamp -lastTimeStamp;
+				lastTimeStamp = nextTimeStamp;
+
+				currentHeight -= diff*SPEED_HEIGHT;
+
+				if(currentHeight < 0){
+					currentHeight = 0;
+				}
+			}
+		}
+		glutPostRedisplay();
+	}
+/*
 	if(animation){
 		if(increasePeaks){
 			if(insertNewNodes && level < maxLevel){
@@ -350,7 +504,7 @@ void Drawer::idle(){
 
 		}
 		glutPostRedisplay();
-	}
+	}*/
 }
 
 bool Drawer::unmoveNode(std::pair<double,double> & first, std::pair<double,double>&second, std::pair<double,double>&third, std::pair<std::pair<double,double>,double >&firstColor, std::pair<std::pair<double,double>,double >&secondColor, std::pair<std::pair<double,double>,double >&thirdColor, clock_t diff){
