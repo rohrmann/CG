@@ -5,8 +5,6 @@
 #include <GL/glut.h>
 using namespace std;
 
-Drawer Drawer::instance;
-
 double Drawer::translationX = 0;
 double Drawer::translationY = 0;
 double Drawer::rotation = 0;
@@ -21,8 +19,78 @@ bool Drawer::increasePeaks = true;
 std::list<std::pair<double,double> > Drawer::nodes;
 std::list<std::pair<std::pair<double,double>,double > > Drawer::colors;
 
-void Drawer::drawKochCurveWrapper(){
-	instance.drawKochCurve();
+void Drawer::draw(){
+	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
+	glPushMatrix();
+	//set camera
+	glScaled(scale,scale,scale);
+	glRotated(rotation,0,0,1);
+	glTranslated(translationX,translationY,0);
+	drawPicture();
+	glPopMatrix();
+	glFlush();
+}
+
+void Drawer::drawPicture(){
+	//enable anti-aliasing
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glEnable(GL_LINE_SMOOTH);
+	drawRoundedRectangle();
+	drawText();
+	drawKochCurve();
+	//drawSierpinskiTriangle();
+	glDisable(GL_BLEND);
+	glDisable(GL_LINE_SMOOTH);
+
+}
+
+void Drawer::drawRoundedRectangle(){
+	glColor3d(1,1,1);
+	roundedRectangle(-0.9,-0.9,0.9,0.9,0.08);
+	glColor3d(0,0,0);
+	roundedRectangle(-0.87,-0.87,0.87,0.87,0.07);
+}
+
+void Drawer::roundedRectangle(double leftX, double leftY, double rightX,double rightY,double radius){
+	glRectd(leftX,leftY+radius,rightX,rightY-radius);
+	glRectd(leftX+radius,leftY,rightX-radius,rightY);
+
+	glPushMatrix();
+	glTranslated(leftX+radius,leftY+radius,0);
+	glutSolidSphere(radius,20,10);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(leftX+radius,rightY-radius,0);
+	glutSolidSphere(radius,20,10);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(rightX-radius,leftY+radius,0);
+	glutSolidSphere(radius,20,10);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(rightX-radius,rightY-radius,0);
+	glutSolidSphere(radius,20,10);
+	glPopMatrix();
+}
+
+void Drawer::drawText(){
+	glLineWidth(2.0);
+	glColor3d(1.0,1.0,1.0);
+	print("Koch-Curve Animation",-0.6,0.7,0,0.0008);
+}
+
+void Drawer::print(const string& text, double x, double y,double z, double scale){
+	glPushMatrix();
+	glTranslated(x,y,z);
+	glScaled(scale,scale,scale);
+
+	for(int i =0; i< text.size();i++){
+		glutStrokeCharacter(GLUT_STROKE_ROMAN,text[i]);
+	}
+
+	glPopMatrix();
 }
 
 void Drawer::init(){
@@ -30,7 +98,10 @@ void Drawer::init(){
 	glLoadIdentity();
 	glOrtho(-0.5,0.5,-0.5,0.5,-0.5,0.5);
 
-	glClearColor(1.0,1.0,1.0,1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glClearColor(0,0,0,1.0);
 	glShadeModel(GL_SMOOTH);
 
 	std::pair<double,double> node1(0,0.577350269);
@@ -57,9 +128,15 @@ void Drawer::init(){
 	cout << "Animation: T" << endl;
 }
 
+void Drawer::drawSierpinskiTriangle(){
+}
+
 void Drawer::reshape(int width, int height){
 	glViewport (0, 0, (GLsizei) width, (GLsizei) height);
 	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glOrtho(-0.5,0.5,-0.5,0.5,-0.5,0.5);
 }
@@ -67,62 +144,54 @@ void Drawer::reshape(int width, int height){
 
 void Drawer::drawKochCurve(){
 
-	glClear(GL_COLOR_BUFFER_BIT);
+	glLineWidth(1);
 
-	glLoadIdentity();
-	glPushMatrix();
-		//set camera
-		glScaled(scale,scale,scale);
-		glRotated(rotation,0,0,1);
-		glTranslated(translationX,translationY,0);
+	std::pair<double, double> first;
+	std::pair<double, double> second;
+	std::pair<std::pair<double,double>,double > firstColor;
+	std::pair<std::pair<double,double>,double > secondColor;
 
-		glBegin(GL_LINE_LOOP);
-		std::list<std::pair<std::pair<double,double>,double > >::const_iterator cit = colors.begin();
-		for(std::list<std::pair<double,double> >::const_iterator it = nodes.begin(); it != nodes.end(); ++it){
-			glColor3d(cit->first.first,cit->first.second,cit->second);
-			glVertex2d(it->first,it->second);
-			++cit;
-		}
+	std::list<std::pair<std::pair<double,double>,double > >::const_iterator cit = colors.begin();
+	std::list<std::pair<double,double> >::const_iterator it = nodes.begin();
+
+	second = *it;
+	secondColor = *cit;
+
+	++it;
+	++cit;
+
+	while(it != nodes.end()){
+		first = second;
+		firstColor = secondColor;
+
+		second = *it;
+		secondColor = *cit;
+
+		glBegin(GL_LINE);
+		glColor3d(firstColor.first.first,firstColor.first.second,firstColor.second);
+		glVertex2d(first.first,first.second);
+		glColor3d(secondColor.first.first,secondColor.first.second,secondColor.second);
+		glVertex2d(second.first,second.second);
 		glEnd();
+
+		++it;
+		++cit;
+	}
+
+	first = second;
+	firstColor = secondColor;
+
+	second = *nodes.begin();
+	secondColor = *colors.begin();
+
+	glBegin(GL_LINE);
+	glColor3d(firstColor.first.first,firstColor.first.second,firstColor.second);
+	glVertex2d(first.first,first.second);
+	glColor3d(secondColor.first.first,secondColor.first.second,secondColor.second);
+	glVertex2d(second.first,second.second);
+	glEnd();
 	glPopMatrix();
 	glFlush();
-}
-
-void Drawer::drawKochCurveHelper(int i){
-	if(i == 0){
-		glBegin(GL_LINE);
-		glColor3d(0,0,0);
-		glVertex3d(-0.5,0,0);
-		glVertex3d(0.5,0,0);
-		glEnd();
-	}
-	else{
-		glPushMatrix();
-		glTranslated(-1.0/3,0,0);
-		glScaled(1.0/3,1.0/3,1.0/3);
-		drawKochCurveHelper(i-1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslated(-1.0/12,sin(1.0/3*M_PI)*1.0/6,0);
-		glRotated(60,0,0,1);
-		glScaled(1.0/3,1.0/3,1.0/3);
-		drawKochCurveHelper(i-1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslated(1.0/12,sin(1.0/3*M_PI)*1.0/6,0);
-		glRotated(-60,0,0,1);
-		glScaled(1.0/3,1.0/3,1.0/3);
-		drawKochCurveHelper(i-1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslated(1.0/3,0,0);
-		glScaled(1.0/3,1.0/3,1.0/3);
-		drawKochCurveHelper(i-1);
-		glPopMatrix();
-	}
 }
 
 void Drawer::insertNodes(const std::pair<double,double>& first,const std::pair<double,double>& second,std::list<std::pair<double,double> >::iterator& it, std::list<std::pair<std::pair<double,double>,double > >::iterator& cit){
@@ -179,7 +248,7 @@ void Drawer::idle(){
 				while(it != nodes.end()){
 					first = second;
 					second = *it;
-					instance.insertNodes(first,second,it,cit);
+					insertNodes(first,second,it,cit);
 					++it;
 					++cit;
 				}
@@ -187,7 +256,7 @@ void Drawer::idle(){
 				first = second;
 				second = nodes.front();
 
-				instance.insertNodes(first,second,it,cit);
+				insertNodes(first,second,it,cit);
 
 				insertNewNodes = false;
 
@@ -400,11 +469,13 @@ void Drawer::keyboard(unsigned char ch, int x, int y){
 		lastTimeStamp = clock();
 		break;
 	}
+
+	/*
 	cerr << "TranslationX:" << translationX << endl;
 	cerr << "TranslationY:" << translationY << endl;
 	cerr << "Scale:" << scale << endl;
 	cerr << "Rotation:" << rotation << endl;
-	cerr << "Animation:" << (animation ? "true" : "false") << endl;
+	cerr << "Animation:" << (animation ? "true" : "false") << endl;*/
 }
 
 

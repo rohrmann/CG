@@ -9,7 +9,7 @@ int main(int argc, char** argv){
 	glutInitWindowSize(500,500);
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("Assignment 1: Animated Koch-Curve");
-	glutDisplayFunc(Drawer::drawKochCurveWrapper);
+	glutDisplayFunc(Drawer::draw);
 	glutKeyboardFunc(Drawer::keyboard);
 	glutReshapeFunc(Drawer::reshape);
 	glutIdleFunc(Drawer::idle);
