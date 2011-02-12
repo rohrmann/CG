@@ -11,6 +11,8 @@
 #include "Updatable.h"
 #include "Drawable.h"
 #include <list>
+#include "Vector4.h"
+#include "Vector2.h"
 
 class Object;
 class Background;
@@ -30,6 +32,7 @@ public:
 	void init();
 	void update(double diffTime);
 	void draw();
+	Vector2<double> calcVelocity(Object* fixpoint, Vector2<double> pos, double ratio, bool clockwise = true);
 };
 
 

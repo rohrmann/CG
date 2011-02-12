@@ -15,8 +15,9 @@ class Planet : public Object{
 protected:
 	double radius;
 	Vector4<double> color;
+	Object* fixpoint;
 public:
-	Planet(double radius, Vector4<double> color, Vector2<double> position, Vector2<double> velocity, double mass);
+	Planet(double radius, Vector4<double> color, Object* fixpoint, Vector2<double> position, Vector2<double> velocity, double mass);
 	void draw();
 	void update(double diffTime);
 };

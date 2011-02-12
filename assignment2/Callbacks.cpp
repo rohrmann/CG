@@ -19,7 +19,7 @@ Scene Callbacks::scene(&Callbacks::camera);
 void Callbacks::init(){
 	glClearColor(0,0,0,1);
 	glShadeModel(GL_SMOOTH);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
 	for(int i = 0; i< 256;i++){
@@ -41,6 +41,7 @@ void Callbacks::reshape(int width, int height){
 void Callbacks::idle(){
 	clock_t currentTimeStamp = clock();
 	double diffTime = (double)(currentTimeStamp - lastTimeStamp)/CLOCKS_PER_SEC;
+	diffTime/=1.5;
 	lastTimeStamp = currentTimeStamp;
 
 	keyHandling(diffTime);

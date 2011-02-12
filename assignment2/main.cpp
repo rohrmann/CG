@@ -14,7 +14,6 @@ int main(int argc, char ** argv){
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("Assignment 2");
 
-
 	Callbacks::init();
 
 	glutIdleFunc(Callbacks::idle);

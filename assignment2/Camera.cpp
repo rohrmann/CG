@@ -28,32 +28,37 @@ void Camera::init(double moveSpeedX, double moveSpeedY, double rotationSpeed, do
 
 void Camera::setCamera(){
 	glRotated(-angle,0,0,1);
-	glTranslated(-x,-y,0);
 	glScaled(scale,scale,scale);
+	glTranslated(-x,-y,0);
+
 }
 
 void Camera::moveLeft(double diff){
-	x -= diff*moveSpeedX/scale;
+	x -= diff*moveSpeedX/scale*cos(angle/180*M_PI);
+	y -= diff*moveSpeedY/scale*sin(angle/180*M_PI);
 }
 
 void Camera::moveRight(double diff){
-	x += diff*moveSpeedX/scale;
+	x += diff*moveSpeedX/scale*cos(angle/180*M_PI);
+	y += diff*moveSpeedY/scale*sin(angle/180*M_PI);
 }
 
 void Camera::moveUp(double diff){
-	y += diff*moveSpeedY/scale;
+	y += diff*moveSpeedY/scale*cos(angle/180*M_PI);
+	x += diff*moveSpeedX/scale*sin(-angle/180*M_PI);
 }
 
 void Camera::moveDown(double diff){
-	y-= diff* moveSpeedY/scale;
+	y-= diff* moveSpeedY/scale*cos(angle/180*M_PI);
+	x-= diff*moveSpeedX/scale*sin(-angle/180*M_PI);
 }
 
 void Camera::rotateLeft(double diff){
-	angle -= diff*rotatationSpeed;
+	angle += diff*rotatationSpeed;
 }
 
 void Camera::rotateRight(double diff){
-	angle += diff*rotatationSpeed;
+	angle -= diff*rotatationSpeed;
 }
 
 void Camera::zoomIn(double diff){

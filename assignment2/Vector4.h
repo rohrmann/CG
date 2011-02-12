@@ -20,24 +20,40 @@ public:
 		data[3] = a;
 	}
 
-	T getX(){
+	T getX()const{
 		return data[0];
 	}
 
-	T getY(){
+	T getY()const{
 		return data[1];
 	}
 
-	T getZ(){
+	T getZ()const{
 		return data[2];
 	}
 
-	T getA(){
+	T getA()const{
 		return data[3];
 	}
 
 	T* getData(){
 		return data;
+	}
+
+	void setX(T data){
+		this->data[0] = data;
+	}
+
+	void setY(T data){
+		this->data[1] = data;
+	}
+
+	void setZ(T data){
+		this->data[2] = data;
+	}
+
+	void setA(T data){
+		this->data[3] = data;
 	}
 };
 
