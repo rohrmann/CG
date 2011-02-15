@@ -57,7 +57,7 @@ Scene::~Scene(){
 }
 
 void Scene::init(){
-
+	//set up the scene
 	background = new Background(camera,new ExponentialDistributor(100),new UniformDistributor(-1,1),new UniformDistributor(-1,1),new ExponentialDistributor(1.0/2),Vector4<double>(0,0,0.33,1));
 	sun = new Sun(0.1,Vector4<double>(1,1,0,0.7),50,new NormalDistributor(0,8),new NormalDistributor(30,1200));
 
@@ -103,6 +103,10 @@ void Scene::init(){
 	objects.push_back(planet);
 }
 
+/*
+ * This method calculates how fast a planet has to move into the perpendicular direction to the connection line
+ * between the planet and its fixpoint in order to be on an elliptic flight path
+ */
 Vector2<double> Scene::calcVelocity(Object* fixpoint,Vector2<double> pos, double ratio,bool clockwise){
 	if(ratio < 1){
 		ratio = 1;
@@ -151,6 +155,9 @@ void Scene::update(double diffTime){
 	}
 }
 
+/*
+ * switch between the time mode and the normal mode
+ */
 void Scene::switchMode(){
 
 	if(background){

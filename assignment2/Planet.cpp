@@ -40,6 +40,10 @@ void Planet::addMoon(Planet* moon){
 	moons.push_back(moon);
 }
 
+/*
+ * The next position is determined by the numerical approximation of the solution of the differential
+ * equation: x'' = G*m/|x|^2. The Runge-Kutta method of the 4th order is used to solve it numerically.
+ */
 void Planet::update(double diffTime){
 
 	if(!clockMode){

@@ -15,6 +15,10 @@
 class Triangle;
 class Distributor;
 
+/*
+ * The sun has a corona which is achieved by drawing several convex triangles which are turning differently
+ * at the same place with alpha blending enabled.
+ */
 class Sun : public Object{
 private:
 	int numberTriangles;

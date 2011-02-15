@@ -79,6 +79,7 @@ void Background::update(double diffTime){
 	double creationTime = 0;
 	creationTime = creationDistributor->distribute();
 
+	//create new stars as long as the creation event is before the diffTime limit
 	bool moreStars = creationTime < diffTime;
 	while(moreStars && stars.size() < maxStars){
 		addStar();
@@ -90,6 +91,7 @@ void Background::update(double diffTime){
 
 	for(std::list<Star*>::iterator it = stars.begin(); it != stars.end();){
 		(*it)->update(diffTime);
+		//check for dead stars (glowing duration was exceeded) or for stars which are out of the perspective to remove them
 		if((*it)->isDead(-1/camera->getScale()+camera->getX(),1/camera->getScale()+camera->getX(),-1/camera->getScale()+camera->getY(), 1/camera->getScale()+camera->getY())){
 			it = stars.erase(it);
 		}

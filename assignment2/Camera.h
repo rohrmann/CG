@@ -8,6 +8,9 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+/*
+ * This class represents the viewer and thus saves the translation, rotation and zoom factor
+ */
 class Camera{
 private:
 	double moveSpeedX;

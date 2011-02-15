@@ -11,6 +11,9 @@
 #include "Derivative.h"
 #include "Vector2.h"
 
+/*
+ * This class represents the right side of the differential equation of the gravitational force
+ */
 class GravitationalDerivative : public Derivative<Vector2<Vector2<double> > >{
 private:
 	double mass;

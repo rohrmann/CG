@@ -12,6 +12,9 @@
 
 class Bicycle;
 
+/*
+ * This class represents a planet with a bicycle on the surface
+ */
 class PlanetBicycle : public PlanetTexture{
 	Bicycle* bicycle;
 public:

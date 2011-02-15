@@ -11,7 +11,9 @@
 #include "Planet.h"
 #include <cstring>
 #include <GL/glut.h>
-
+/*
+ * This class draws a planet with a texture
+ */
 class PlanetTexture: public Planet{
 protected:
 	GLuint texture;

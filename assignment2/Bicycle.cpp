@@ -107,6 +107,7 @@ void Bicycle::draw(){
 
 	glPushMatrix();
 	glColor4d(0,0,0,1);
+	//let the pedals be turning
 	glRotated(2*angle,0,0,1);
 	glBegin(GL_LINE);
 
@@ -117,7 +118,7 @@ void Bicycle::draw(){
 
 	glTranslated(0,pedalLength,0);
 	glRotated(-2*angle,0,0,1);
-
+	//let the end of the pedals be horizontal
 	glBegin(GL_LINE);
 	glVertex2d(-pedalR,0);
 	glVertex2d(pedalR,0);

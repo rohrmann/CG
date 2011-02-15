@@ -18,6 +18,10 @@ class Distributor;
 class Star;
 class Camera;
 
+/*
+ * This class represents the background. It generates randomly new stars at random positions which have
+ * a random glowing duration. The probability distributions can be chosen.
+ */
 class Background : public Updatable,Drawable{
 private:
 	static const double SPACEEXTENSION;

@@ -11,6 +11,9 @@
 #include "Object.h"
 #include "Vector4.h"
 
+/*
+ * This class represents a star whose characteristics are the position, the total glowing duration and the elapsedTime
+ */
 class Star: public Object{
 private:
 	double glowingDuration;

@@ -10,6 +10,9 @@
 
 #include "Object.h"
 
+/*
+ * This class represents the bicycle and animates it
+ */
 class Bicycle: public Object{
 private:
 	double scale;

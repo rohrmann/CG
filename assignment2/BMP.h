@@ -49,6 +49,9 @@ enum Format{
 		ARGB,RGB
 };
 
+/*
+ * This class reads a bmp file and saves the data as well as the width, height and the format
+ */
 class BMP{
 private:
 	uint8_t* data;

@@ -10,6 +10,9 @@
 
 #include "Derivative.h"
 
+/*
+ * This class implements the runge kutta method to solve a differential equation numerically
+ */
 template<typename R>
 class RungeKutta{
 public:

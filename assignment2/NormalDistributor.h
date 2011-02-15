@@ -11,6 +11,9 @@
 #include "Distributor.h"
 #include <cmath>
 
+/*
+ * Normal distribution
+ */
 class NormalDistributor : public Distributor{
 private:
 	double expectation;

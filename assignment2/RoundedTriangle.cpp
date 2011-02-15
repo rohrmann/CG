@@ -15,6 +15,7 @@ void RoundedTriangle::draw(){
 	glPushMatrix();
 	glRotated(angle,0,0,1);
 
+	//draw the triangle specified by a,b,c
 	glBegin(GL_POLYGON);
 	glColor4d(color.getX(),color.getY(),color.getZ(),color.getA());
 	glVertex2d(a.getX(),a.getY());
@@ -22,6 +23,7 @@ void RoundedTriangle::draw(){
 	glVertex2d(c.getX(),c.getY());
 	glEnd();
 
+	//calculate the piece of a circle which has to be added to each side to make the triangle convex
 	std::list<Vector2<double> >* nodes = makeNodes(a,b);
 	drawNodes(nodes);
 	delete nodes;
@@ -45,6 +47,9 @@ void RoundedTriangle::drawNodes(std::list<Vector2<double> >*nodes){
 	glEnd();
 }
 
+/*
+ * This method calculates the points which form a piece of a circle and form the convex triangle
+ */
 std::list<Vector2<double> >* RoundedTriangle::makeNodes(const Vector2<double>& a, const Vector2<double>& b){
 	std::list<Vector2<double> >* result = new std::list<Vector2<double> >;
 

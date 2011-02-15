@@ -8,6 +8,10 @@
 #ifndef DERIVATIVE_H_
 #define DERIVATIVE_H_
 
+/*
+ * this class is the base class for our right side of the differential equation for the flight path of
+ * planets.
+ */
 template<typename T>
 class Derivative{
 public:

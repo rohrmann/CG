@@ -14,11 +14,13 @@
 #include "Vector4.h"
 #include "Vector2.h"
 
+/*
+ * Convenient class which contains some useful functions
+ */
 class Helper{
 public:
 	static void drawCircle(double radius,int segments=100);
 	static void drawCircleWithTexture(GLuint texName, double radius,Vector2<double> dir,double alpha=1,int segments=100);
-	static void drawLightCircle(double radius, Vector4<double> startColor=Vector4<double>(1,1,1,0.5), Vector4<double> endColor=Vector4<double>(0.7,0.7,0.7,0.5), Vector4<double> night = Vector4<double>(0.4,0.4,0.4,1),int segments=100);
 	static void drawHalfCircle(double radius, Vector4<double> startColor, Vector4<double> endColor, int segments=100);
 
 	static const double GRAVITATIONALCONSTANT;

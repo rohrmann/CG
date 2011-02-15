@@ -14,6 +14,7 @@ Star::Star(Vector2<double> pos, double glowingDuration): Object(pos){
 	elapsedTime = 0;
 }
 
+//the brightness of the star is a sinus function with a period of 2*glowingDuration
 Vector4<double> Star::calcColor(){
 	Vector4<double> result(std::sin(elapsedTime/glowingDuration*M_PI),std::sin(elapsedTime/glowingDuration*M_PI),std::sin(elapsedTime/glowingDuration*M_PI),1);
 	return result;

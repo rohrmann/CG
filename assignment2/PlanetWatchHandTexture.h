@@ -12,6 +12,9 @@
 
 class AngleCalculator;
 
+/*
+ * This class is used for the time mode of the application. It represents one of the hands of the watch.
+ */
 class PlanetWatchHandTexture : public PlanetTexture{
 protected:
 	double handLength;

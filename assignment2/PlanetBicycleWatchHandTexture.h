@@ -12,6 +12,9 @@
 
 class Bicycle;
 
+/*
+ * This class combines the bicycle with the hands of the watch
+ */
 class PlanetBicycleWatchHandTexture : public PlanetWatchHandTexture{
 private:
 	Bicycle *bicycle;

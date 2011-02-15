@@ -11,6 +11,9 @@
 #include "Triangle.h"
 #include <list>
 
+/*
+ * This class is used to draw convex triangles
+ */
 class RoundedTriangle : public Triangle{
 private:
 	double ratio;

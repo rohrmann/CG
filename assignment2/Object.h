@@ -12,6 +12,9 @@
 #include "Drawable.h"
 #include "Vector2.h"
 
+/*
+ * Base class for planets
+ */
 class Object: public Updatable, public Drawable{
 protected:
 	Vector2<double> pos;

@@ -22,6 +22,7 @@ bool Callbacks::unpolling = false;
 void Callbacks::init(){
 	glClearColor(0,0,0,1);
 	glShadeModel(GL_SMOOTH);
+	//settings for alpha blending
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
@@ -30,6 +31,12 @@ void Callbacks::init(){
 	}
 
 	scene.init();
+
+	cout << "Move UP/DOWN: W/S" << endl;
+	cout << "Move LEFT/RIGHT: A/D" << endl;
+	cout << "Rotate clockwise/anti-clockwise: E/Q" << endl;
+	cout << "Zoom in/out: R/F" << endl;
+	cout << "Toggle time mode: T" << endl;
 }
 
 void Callbacks::reshape(int width, int height){
@@ -55,6 +62,10 @@ void Callbacks::idle(){
 	glutPostRedisplay();
 }
 
+/*
+ * by saving which keys are currently pressed and which not it is possible to do several camera movements
+ * at the same time.
+ */
 void Callbacks::keyHandling(double diffTime){
 	//move left
 	if(keys['a'] || keys['A']){
@@ -99,10 +110,12 @@ void Callbacks::keyHandling(double diffTime){
 	}
 }
 
+//this method saves which keys are currently pressed
 void Callbacks::keyboard(unsigned char key, int x, int y){
 	keys[key] = true;
 }
 
+//this method registers the key which is not pressed anymore
 void Callbacks::keyboardUp(unsigned char key, int x, int y){
 	keys[key] = false;
 }

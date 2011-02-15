@@ -46,6 +46,8 @@ void PlanetTexture::draw(){
 	glTranslated(pos.getX(),pos.getY(),0);
 	Vector2<double> heading(-std::sin(angle/180*M_PI),std::cos(angle/180*M_PI));
 	Vector2<double> fixDir = (fixpoint->getLightPos()-pos).normalize();
+	//this is the direction to the sun in the transformed coordinate system. it is used
+	//to lighting
 	Vector2<double> transFixDir(heading.orthogonal().dot(fixDir),heading.dot(fixDir));
 	drawPlanet(angle,transFixDir,(clockMode?0.5:1));
 

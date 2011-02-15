@@ -12,6 +12,10 @@
 #include "Vector4.h"
 #include <list>
 
+/*
+ * Base class for planets which implements the calculation of the flight path around a much heavier
+ * planet (such as the sun for example).
+ */
 class Planet : public Object{
 protected:
 	double radius;

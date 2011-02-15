@@ -20,6 +20,9 @@ class Object;
 class Background;
 class Camera;
 
+/*
+ * This class stores the objects which are displayed and which form the scene
+ */
 class Scene: public Updatable,Drawable{
 private:
 	Camera * camera;

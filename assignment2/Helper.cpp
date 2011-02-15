@@ -35,17 +35,6 @@ void Helper::drawCircle(double radius, int segments){
 	glEnd();
 }
 
-void Helper::drawLightCircle(double radius, Vector4<double> startColor, Vector4<double> endColor, Vector4<double> night,int segments){
-	drawHalfCircle(radius,startColor,endColor,segments);
-
-	glPushMatrix();
-
-	glRotated(180,0,0,1);
-	drawHalfCircle(radius,night,night,segments);
-
-	glPopMatrix();
-}
-
 void Helper::drawHalfCircle(double radius, Vector4<double> startColor, Vector4<double> endColor,int segments){
 	glBegin(GL_POLYGON);
 	double angleSegment = M_PI/segments;

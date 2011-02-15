@@ -8,6 +8,9 @@
 #ifndef DISTRIBUTOR_H_
 #define DISTRIBUTOR_H_
 
+/*
+ * Base class for different probabilistic distributions
+ */
 class Distributor{
 public:
 	virtual double distribute()=0;
