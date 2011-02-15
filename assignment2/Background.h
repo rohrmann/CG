@@ -38,6 +38,10 @@ public:
 
 	void addStar();
 	void initStars();
+
+	void switchMode(){
+
+	}
 };
 
 

@@ -18,6 +18,7 @@ private:
 	static Camera camera;
 	static bool keys[256];
 	static Scene scene;
+	static bool unpolling;
 public:
 	static void display();
 	static void idle();

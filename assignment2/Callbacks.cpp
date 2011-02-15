@@ -15,6 +15,7 @@ clock_t Callbacks::lastTimeStamp = clock();
 Camera Callbacks::camera;
 bool Callbacks::keys[256];
 Scene Callbacks::scene(&Callbacks::camera);
+bool Callbacks::unpolling = false;
 
 
 
@@ -86,6 +87,15 @@ void Callbacks::keyHandling(double diffTime){
 
 	if(keys['f'] || keys['F']){
 		camera.zoomOut(diffTime);
+	}
+
+	if((keys['t'] || keys['T']) && !unpolling){
+		scene.switchMode();
+		unpolling = true;
+	}
+
+	if(!keys['t'] && !keys['T'] && unpolling){
+		unpolling = false;
 	}
 }
 

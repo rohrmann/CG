@@ -17,9 +17,11 @@ protected:
 	Vector2<double> pos;
 	double mass;
 	Vector2<double> velocity;
+	bool clockMode;
 public:
 	Object(Vector2<double> pos = Vector2<double>(0,0), Vector2<double> velocity=Vector2<double>(0,0), double mass=1);
-
+	virtual ~Object(){
+	}
 	Vector2<double> getPos(){
 		return pos;
 	}
@@ -28,8 +30,20 @@ public:
 		return mass;
 	}
 
+	virtual Vector2<double> getLightPos(){
+		return pos;
+	}
+
 	Vector2<double> getVelocity(){
 		return velocity;
+	}
+
+	Vector2<double> getRelPos(){
+		return Vector2<double>(0,0);
+	}
+
+	virtual void switchMode(){
+		clockMode = !clockMode;
 	}
 };
 

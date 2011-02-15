@@ -13,7 +13,7 @@
 #include <GL/glut.h>
 
 class PlanetTexture: public Planet{
-private:
+protected:
 	GLuint texture;
 	double angle;
 	double rotationSpeed;
@@ -22,6 +22,10 @@ public:
 	void draw();
 	void initTexture(std::string filename);
 	void update(double diffTime);
+	void updateAngle(double diffTime);
+	void drawPlanet(double angle,Vector2<double> transFixDir, double alpha);
+
+	void switchMode();
 };
 
 

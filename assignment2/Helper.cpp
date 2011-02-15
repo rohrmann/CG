@@ -73,7 +73,7 @@ void Helper::drawHalfCircle(double radius, Vector4<double> startColor, Vector4<d
 	glEnd();
 }
 
-void Helper::drawCircleWithTexture(GLuint texName,double radius,Vector2<double> dir, int segments){
+void Helper::drawCircleWithTexture(GLuint texName,double radius,Vector2<double> dir,double alpha, int segments){
 	Vector2<double> current(0,0);
 	double angle = 2*M_PI/segments;
 
@@ -90,7 +90,7 @@ void Helper::drawCircleWithTexture(GLuint texName,double radius,Vector2<double> 
 	double dist = (dir.dot(current)/radius+1)/2;
 	double value = calcValue(dist);
 	glTexCoord2d(0.5,0.5);
-	glColor4d(value,value,value,1);
+	glColor4d(value,value,value,alpha);
 	glVertex2d(current.getX(),current.getY());
 
 	current = Vector2<double>(radius,0);
@@ -98,7 +98,7 @@ void Helper::drawCircleWithTexture(GLuint texName,double radius,Vector2<double> 
 	value = calcValue(dist);
 
 	glTexCoord2d(texCoords.getX(),texCoords.getY());
-	glColor4d(value,value,value,1);
+	glColor4d(value,value,value,alpha);
 	glVertex2d(current.getX(),current.getY());
 
 	for(int i =0; i< segments;i++){
@@ -109,7 +109,7 @@ void Helper::drawCircleWithTexture(GLuint texName,double radius,Vector2<double> 
 
 		dist = (dir.dot(next)/radius+1)/2;
 		value = calcValue(dist);
-		glColor4d(value,value,value,1);
+		glColor4d(value,value,value,alpha);
 		glTexCoord2d(texCoords.getX(),texCoords.getY());
 		glVertex2d(next.getX(),next.getY());
 		current = next;
@@ -121,7 +121,13 @@ void Helper::drawCircleWithTexture(GLuint texName,double radius,Vector2<double> 
 }
 
 double Helper::calcValue(double dist){
-	return dist;
+
+	if(dist < 0.1){
+		return 0;
+	}
+	else{
+		return (dist-0.1)/0.9;
+	}
 }
 
 void Helper::print(BMP* bmp){
@@ -146,5 +152,40 @@ GLenum Helper::format2GLformat(Format format){
 	}
 	else if(format== ARGB){
 		return GL_RGBA;
+	}
+}
+
+void Helper::drawWheel(double radius,int crossings, int segments){
+	Vector2<double> current(radius,0);
+	double x = std::cos(2*M_PI/segments);
+	double y = -std::sin(2*M_PI/segments);
+
+	glLineWidth(4.0);
+	glColor4d(0,0,0,1);
+	glBegin(GL_LINE_LOOP);
+
+	glVertex2d(current.getX(),current.getY());
+
+	for(int i =0; i < segments-1;i++){
+		current = x*current + y*current.orthogonal();
+		glVertex2d(current.getX(),current.getY());
+	}
+
+	glEnd();
+
+	glColor4d(1,1,1,1);
+	glLineWidth(1.0);
+	x = std::cos(2*M_PI/crossings);
+	y = -std::sin(2*M_PI/crossings);
+
+	current = Vector2<double>(radius,0);
+
+	for(int i =0; i < crossings; i++){
+		glBegin(GL_LINE);
+		glVertex2d(0,0);
+		glVertex2d(current.getX(),current.getY());
+		glEnd();
+
+		current = x*current + y*current.orthogonal();
 	}
 }

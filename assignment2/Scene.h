@@ -36,6 +36,7 @@ public:
 	void update(double diffTime);
 	void draw();
 	Vector2<double> calcVelocity(Object* fixpoint, Vector2<double> pos, double ratio, bool clockwise = true);
+	void switchMode();
 };
 
 

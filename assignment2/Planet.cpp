@@ -19,23 +19,45 @@ Planet::Planet(double radius, Vector4<double> color,Object* fixpoint, Vector2<do
 
 void Planet::draw(){
 	glPushMatrix();
-	glColor4d(color.getX(),color.getY(),color.getZ(),color.getA());
+	glColor4d(color.getX(),color.getY(),color.getZ(),(clockMode? color.getA()*.5:color.getA()));
 	glTranslated(pos.getX(),pos.getY(),0);
 	Helper::drawCircle(radius);
+
+	for(std::list<Planet*>::iterator it = moons.begin(); it != moons.end(); ++it){
+		(*it)->draw();
+	}
+
 	glPopMatrix();
 }
 
+Planet::~Planet(){
+	for(std::list<Planet*>::const_iterator it = moons.begin(); it != moons.end(); ++it ){
+		delete *it;
+	}
+}
+
+void Planet::addMoon(Planet* moon){
+	moons.push_back(moon);
+}
+
 void Planet::update(double diffTime){
-	Vector2<Vector2<double> > initialConditions(pos,velocity);
 
-	RungeKutta<Vector2<Vector2<double> > > solver;
+	if(!clockMode){
+		Vector2<Vector2<double> > initialConditions(pos,velocity);
 
-	Derivative<Vector2<Vector2<double> > >* derivative = new GravitationalDerivative(fixpoint->getPos(),fixpoint->getMass(),Helper::GRAVITATIONALCONSTANT);
-	Vector2<Vector2<double> > result = solver.rk4(diffTime,diffTime/100,initialConditions,derivative);
+		RungeKutta<Vector2<Vector2<double> > > solver;
 
-	pos = result.getX();
-	velocity = result.getY();
+		Derivative<Vector2<Vector2<double> > >* derivative = new GravitationalDerivative(fixpoint->getRelPos(),fixpoint->getMass(),Helper::GRAVITATIONALCONSTANT);
+		Vector2<Vector2<double> > result = solver.rk4(diffTime,diffTime/100,initialConditions,derivative);
 
-	delete derivative;
+		pos = result.getX();
+		velocity = result.getY();
+
+		delete derivative;
+
+		for(std::list<Planet*>::iterator it = moons.begin(); it != moons.end(); ++it){
+			(*it)->update(diffTime);
+		}
+	}
 }
 

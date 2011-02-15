@@ -12,7 +12,7 @@
 #include <GL/glut.h>
 using namespace std;
 
-Sun::Sun(double radius, Vector4<double> baseColor,int numberTriangles, Distributor* offset,Distributor* angleSpeed):Object(Vector2<double>(0,0),Vector2<double>(0,0),1),baseColor(baseColor){
+Sun::Sun(double radius, Vector4<double> baseColor,int numberTriangles, Distributor* offset,Distributor* angleSpeed):Object(Vector2<double>(0,0),Vector2<double>(0,0),0.8),baseColor(baseColor){
 	this->numberTriangles = numberTriangles;
 	this->radius = radius;
 	this->offset = offset;
