@@ -5,17 +5,22 @@
  *      Author: rohrmann
  */
 
+
 #include <GL/glut.h>
 #include "Callbacks.h"
+#include "BMP.h"
+#include <fstream>
+#include "Helper.h"
+using namespace std;
+
 
 int main(int argc, char ** argv){
+
 	glutInit(&argc,argv);
 	glutInitWindowSize(600,600);
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("Assignment 2");
-
 	Callbacks::init();
-
 	glutIdleFunc(Callbacks::idle);
 	glutReshapeFunc(Callbacks::reshape);
 	glutDisplayFunc(Callbacks::display);
@@ -25,4 +30,3 @@ int main(int argc, char ** argv){
 
 	return 0;
 }
-

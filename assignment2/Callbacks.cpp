@@ -16,6 +16,8 @@ Camera Callbacks::camera;
 bool Callbacks::keys[256];
 Scene Callbacks::scene(&Callbacks::camera);
 
+
+
 void Callbacks::init(){
 	glClearColor(0,0,0,1);
 	glShadeModel(GL_SMOOTH);
@@ -25,6 +27,8 @@ void Callbacks::init(){
 	for(int i = 0; i< 256;i++){
 		keys[i] = false;
 	}
+
+	scene.init();
 }
 
 void Callbacks::reshape(int width, int height){
@@ -94,7 +98,7 @@ void Callbacks::keyboardUp(unsigned char key, int x, int y){
 }
 
 void Callbacks::display(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	glPushMatrix();
 	camera.setCamera();

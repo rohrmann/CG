@@ -55,7 +55,16 @@ public:
 	void setA(T data){
 		this->data[3] = data;
 	}
+
+	Vector4<T> operator+(const Vector4<T>& vector)const{
+		return Vector4<T>(data[0] + vector.data[0], data[1] + vector.data[1], data[2] + vector.data[2], data[3] + vector.data[3]);
+	}
 };
+
+template<typename T,typename S>
+Vector4<T> operator*(S value, const Vector4<T>&vector){
+	return Vector4<T>(value*vector.getX(),value*vector.getY(),value*vector.getZ(),value*vector.getA());
+}
 
 
 #endif /* VECTOR4_H_ */

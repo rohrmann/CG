@@ -83,6 +83,10 @@ public:
 	Vector2<T> orthogonal(){
 		return Vector2<T>(y,-x);
 	}
+
+	T dot(const Vector2<T>& vec) const{
+		return vec.x*x + vec.y*y;
+	}
 };
 
 template<typename T>

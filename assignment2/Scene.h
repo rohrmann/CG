@@ -14,6 +14,8 @@
 #include "Vector4.h"
 #include "Vector2.h"
 
+#include <GL/glut.h>
+
 class Object;
 class Background;
 class Camera;
@@ -24,6 +26,7 @@ private:
 	Background* background;
 	Object* sun;
 	std::list<Object*> objects;
+	GLuint texName;
 public:
 	Scene(Camera* camera);
 	Scene();
